@@ -19,20 +19,31 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { useState, useMemo, useCallback } from "react";
-import { Copy, Check, Database, Server, User, Lock, Hash } from "lucide-react";
+import {
+  Copy,
+  Check,
+  Database,
+  Server,
+  User,
+  Lock,
+  Hash,
+  Layers,
+} from "lucide-react";
 
 export default function Home() {
   const [host, setHost] = useState("localhost");
   const [port, setPort] = useState("5432");
   const [user, setUser] = useState("postgres");
-  const [password, setPassword] = useState("postgres");
+  const [password, setPassword] = useState("");
   const [database, setDatabase] = useState("mydb");
+  const [schema, setSchema] = useState("");
   const [copied, setCopied] = useState(false);
 
   // Build the PostgreSQL connection string - memoized to avoid recalculation
   const connectionString = useMemo(() => {
-    return `postgresql://${user}${password ? `:${password}` : ""}@${host}${port ? `:${port}` : ""}/${database}`;
-  }, [user, password, host, port, database]);
+    const baseUrl = `postgresql://${user}${password ? `:${password}` : ""}@${host}${port ? `:${port}` : ""}/${database}`;
+    return schema ? `${baseUrl}?options=-csearch_path=${schema}` : baseUrl;
+  }, [user, password, host, port, database, schema]);
 
   // Memoize the copy handler to avoid recreating on each render
   const handleCopy = useCallback(async () => {
@@ -129,7 +140,7 @@ export default function Home() {
               </Field>
 
               {/* Database Field */}
-              <Field className="md:col-span-2">
+              <Field>
                 <FieldLabel className="flex items-center gap-2">
                   <Database className="w-4 h-4 text-muted-foreground" />
                   Database
@@ -138,6 +149,23 @@ export default function Home() {
                   placeholder="mydb"
                   value={database}
                   onChange={(e) => setDatabase(e.target.value)}
+                  autoComplete="off"
+                />
+              </Field>
+
+              {/* Schema Field */}
+              <Field>
+                <FieldLabel className="flex items-center gap-2">
+                  <Layers className="w-4 h-4 text-muted-foreground" />
+                  Schema{" "}
+                  <span className="text-xs text-muted-foreground">
+                    (optional)
+                  </span>
+                </FieldLabel>
+                <Input
+                  placeholder="public"
+                  value={schema}
+                  onChange={(e) => setSchema(e.target.value)}
                   autoComplete="off"
                 />
               </Field>
@@ -193,7 +221,7 @@ export default function Home() {
                   Format:
                 </strong>{" "}
                 <code className="px-2 py-1 rounded-md bg-muted font-mono text-xs">
-                  postgresql://user:password@host:port/database
+                  postgresql://user:password@host:port/database?options=-csearch_path=schema
                 </code>
               </p>
             </div>
