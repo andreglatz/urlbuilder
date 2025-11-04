@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="none">
+  <!-- Background -->
+  <rect width="256" height="256" rx="60" fill="#18181B"/>
+
+  <!-- Chain Link Icon -->
+  <g transform="translate(128, 128)">
+    <!-- Left link -->
+    <g transform="rotate(-45)">
+      <rect x="-75" y="-20" width="70" height="40" rx="20"
+            fill="none"
+            stroke="#E4E4E7"
+            stroke-width="16"/>
+    </g>
+
+    <!-- Right link -->
+    <g transform="rotate(-45)">
+      <rect x="5" y="-20" width="70" height="40" rx="20"
+            fill="none"
+            stroke="#E4E4E7"
+            stroke-width="16"/>
+    </g>
+
+    <!-- Center connecting piece -->
+    <g transform="rotate(-45)">
+      <rect x="-15" y="-18" width="30" height="36" rx="8"
+            fill="#E4E4E7"/>
+    </g>
+  </g>
+</svg>
